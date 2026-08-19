@@ -87,12 +87,14 @@ aside#side{width:var(--sidebar-w);flex:0 0 auto;display:flex;flex-direction:colu
 .dayHead:last-child{border-right:none}
 .dayHead .dn{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:600}
 .dayHead .dd{font-size:19px;font-weight:600;margin-top:1px;width:32px;height:32px;line-height:32px;border-radius:50%;display:inline-block}
+.dayHead.sel{background:#f5f7ff}
 .dayHead.hoy .dn{color:var(--accent)}
 .dayHead.hoy .dd{background:var(--accent);color:#fff}
 #gridScroll{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;overscroll-behavior:contain}
 #grid{display:grid;position:relative}
 .gutter{border-right:1px solid var(--line-2);position:relative}
 .gutter .hl{position:absolute;right:7px;transform:translateY(-50%);font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.gutter .hl.primera{transform:none;padding-top:3px}
 .daycol{
   position:relative;border-right:1px solid var(--line-2);
   background-image:
@@ -129,6 +131,19 @@ aside#side{width:var(--sidebar-w);flex:0 0 auto;display:flex;flex-direction:colu
 .ev.habito{border-left-style:double;border-left-width:5px}
 .ev.tarea{border-left-style:dotted;border-left-width:5px}
 .ev.hecho .t{text-decoration:line-through;opacity:.65}
+.ev.hito{
+  height:21px;padding:0 6px 0 7px;z-index:8;transform:translateY(-10px);font-size:11.5px;
+  background:var(--c-bg);border:1.5px dashed var(--c-str);border-left:3px solid var(--c-str);
+  display:flex;align-items:center
+}
+.ev.hito .th{display:flex;align-items:center;gap:5px;font-weight:650;line-height:1;min-width:0}
+.ev.hito .ti{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev.hito.hecho{opacity:.62}
+.ev.hito.hecho .ti{text-decoration:line-through}
+.ev.hito.abajo{transform:translateY(-22px)}
+.ev.hito.arriba{transform:translateY(1px)}
+.ev.hito .hh{font-variant-numeric:tabular-nums;opacity:.72;font-weight:600}
+.ev.hito .tag{margin-right:0;font-size:8.5px}
 .ev .grip{position:absolute;left:0;right:0;bottom:0;height:8px;cursor:ns-resize;touch-action:none}
 .ev.ghost{opacity:.35;pointer-events:none}
 
@@ -146,6 +161,7 @@ aside#side{width:var(--sidebar-w);flex:0 0 auto;display:flex;flex-direction:colu
 .chip{display:flex;align-items:center;gap:4px;font-size:11px;padding:1px 4px;border-radius:5px;margin-bottom:2px;background:var(--c-bg);color:var(--c-ink);overflow:hidden;white-space:nowrap;text-overflow:ellipsis;border-left:3px solid var(--c-str)}
 .chip.prueba{font-weight:700}
 .chip.entrega{border-left-style:dashed}
+.chip.hecho{opacity:.6;text-decoration:line-through}
 .chip .h{opacity:.7;font-variant-numeric:tabular-nums}
 .mas{font-size:11px;color:var(--ink-3);padding-left:3px}
 
@@ -158,7 +174,12 @@ aside#side{width:var(--sidebar-w);flex:0 0 auto;display:flex;flex-direction:colu
 .card>h3 .caret{transition:transform .15s;color:var(--ink-3);font-size:10px}
 .card.cerrada>h3 .caret{transform:rotate(-90deg)}
 .card.cerrada .cbody{display:none}
+.card>h3 .count:empty{display:none}
 .card>h3 .count{margin-left:auto;font-size:11px;color:var(--ink-3);background:#f2f3f7;border-radius:20px;padding:1px 7px;letter-spacing:0}
+.hadd{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;color:var(--ink-3);flex:0 0 auto}
+.hadd:hover{background:#eceef3;color:var(--accent)}
+.card>h3 .count + .hadd{margin-left:4px}
+.card>h3 .count:empty + .hadd{margin-left:auto}
 .cbody{padding:0 10px 10px}
 .lista{border-top:1px solid var(--line-2);padding-top:8px;margin-top:2px}
 .lista:first-child{border-top:none}
@@ -176,7 +197,8 @@ aside#side{width:var(--sidebar-w);flex:0 0 auto;display:flex;flex-direction:colu
 .cbx svg{opacity:0;width:11px;height:11px}
 .it.done .cbx svg{opacity:1}
 .it .tx{flex:1;min-width:0;font-size:13.5px;word-break:break-word;padding-top:.5px}
-.it.done .tx{text-decoration:line-through;color:var(--ink-3)}
+.it.done .tx{color:var(--ink-3)}
+.it.done .tt{text-decoration:line-through}
 .it .tx small{display:block;font-size:11px;color:var(--accent);font-weight:600}
 .it .acts{display:flex;gap:1px;opacity:0;flex:0 0 auto;transition:opacity .12s}
 .it:hover .acts,.it:focus-within .acts{opacity:1}
@@ -186,13 +208,14 @@ aside#side{width:var(--sidebar-w);flex:0 0 auto;display:flex;flex-direction:colu
 .hab{display:flex;align-items:center;gap:8px;padding:5px 2px;border-radius:8px}
 .hab:hover{background:#f7f8fa}
 .hab .dotc{width:9px;height:9px;border-radius:3px;flex:0 0 auto}
-.addrow{display:flex;gap:6px;align-items:center;padding:3px 2px 0}
+.addrow{display:flex;gap:6px;align-items:center;padding:2px 2px 0}
 .addrow input{
-  flex:1;min-width:0;height:30px;border:1px solid transparent;background:#f4f5f8;border-radius:8px;padding:0 9px;font-size:13.5px;outline:none
+  flex:1;min-width:0;height:28px;border:1px solid var(--accent);background:#fff;border-radius:8px;
+  padding:0 9px;font-size:13.5px;outline:none;box-shadow:0 0 0 3px var(--accent-soft)
 }
-.addrow input:focus{border-color:var(--accent);background:#fff}
 .vacio{color:var(--ink-3);font-size:12.5px;padding:4px 3px 6px;font-style:italic}
 .newlist{width:100%;margin-top:8px;justify-content:center;border-style:dashed;color:var(--ink-2)}
+.lista .lh .n{min-width:12px;text-align:right}
 
 /* ---------- modales ---------- */
 .overlay{position:fixed;inset:0;background:rgba(20,24,33,.42);display:grid;place-items:center;z-index:100;padding:16px;backdrop-filter:blur(2px)}
@@ -211,8 +234,9 @@ aside#side{width:var(--sidebar-w);flex:0 0 auto;display:flex;flex-direction:colu
 .tipos button{border:1px solid var(--line);border-radius:9px;padding:7px 2px;font-size:12px;font-weight:600;color:var(--ink-2);display:flex;flex-direction:column;align-items:center;gap:3px}
 .tipos button .ic{font-size:15px}
 .tipos button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
-.swatches{display:flex;flex-wrap:wrap;gap:7px}
-.sw{width:26px;height:26px;border-radius:8px;border:2px solid transparent;position:relative}
+.swatches{display:grid;grid-template-columns:repeat(10,1fr);gap:6px}
+.sw{aspect-ratio:1;width:100%;border-radius:7px;border:2px solid transparent;position:relative}
+@media (max-width:520px){.swatches{grid-template-columns:repeat(8,1fr)}}
 .sw.on{border-color:var(--ink);box-shadow:inset 0 0 0 2px #fff}
 .dias{display:flex;gap:5px}
 .dias button{flex:1;height:32px;border:1px solid var(--line);border-radius:8px;font-size:12px;font-weight:600;color:var(--ink-2)}
@@ -303,17 +327,20 @@ aside#side{width:var(--sidebar-w);flex:0 0 auto;display:flex;flex-direction:colu
 
     <aside id="side">
       <section class="card" data-sec="pendientes">
-        <h3><span class="caret">▼</span> Cosas Pendientes <span class="count"></span></h3>
+        <h3><span class="caret">▼</span> Cosas Pendientes <span class="count"></span>
+          <button class="hadd" data-act="nueva-lista" data-sec="pendientes" title="Nueva lista">＋</button></h3>
         <div class="cbody" data-listas="pendientes"></div>
       </section>
 
       <section class="card" data-sec="habitos">
-        <h3><span class="caret">▼</span> Hábitos <span class="count"></span></h3>
+        <h3><span class="caret">▼</span> Hábitos <span class="count"></span>
+          <button class="hadd" data-act="nuevo-habito" title="Nuevo hábito">＋</button></h3>
         <div class="cbody" id="habBody"></div>
       </section>
 
       <section class="card" data-sec="universidad">
-        <h3><span class="caret">▼</span> Universidad <span class="count"></span></h3>
+        <h3><span class="caret">▼</span> Universidad <span class="count"></span>
+          <button class="hadd" data-act="nueva-lista" data-sec="universidad" title="Nueva lista">＋</button></h3>
         <div class="cbody" data-listas="universidad"></div>
       </section>
     </aside>
@@ -330,21 +357,52 @@ aside#side{width:var(--sidebar-w);flex:0 0 auto;display:flex;flex-direction:colu
    navegador y (opcionalmente) se sincroniza con Firebase.
    ============================================================ */
 
-/* ---------- paleta de colores ---------- */
-const PAL = {
-  azul:    {n:'Azul',    bg:'#e9edfd', str:'#3b5bdb', ink:'#1e3a9e'},
-  indigo:  {n:'Índigo',  bg:'#eeeafd', str:'#6741d9', ink:'#4a2ba8'},
-  violeta: {n:'Violeta', bg:'#f8e9fc', str:'#9c36b5', ink:'#74208a'},
-  rosa:    {n:'Rosa',    bg:'#fdeaf1', str:'#d6336c', ink:'#a3204f'},
-  rojo:    {n:'Rojo',    bg:'#fdeaea', str:'#e03131', ink:'#a72020'},
-  naranjo: {n:'Naranjo', bg:'#fdefe4', str:'#e8590c', ink:'#a94209'},
-  ambar:   {n:'Ámbar',   bg:'#fdf5df', str:'#c99700', ink:'#8a6a02'},
-  lima:    {n:'Lima',    bg:'#f0f8e2', str:'#66a80f', ink:'#46700a'},
-  verde:   {n:'Verde',   bg:'#e7f7ec', str:'#2f9e44', ink:'#1d6b2d'},
-  teal:    {n:'Verde azulado', bg:'#e3f7f1', str:'#0ca678', ink:'#087153'},
-  cian:    {n:'Cian',    bg:'#e3f5f8', str:'#1098ad', ink:'#0a6877'},
-  gris:    {n:'Gris',    bg:'#eef0f3', str:'#5c6470', ink:'#3d434c'}
+/* ---------- paleta de colores ----------
+   De cada color base se calculan el fondo suave y el tono de texto,
+   así agregar colores nuevos es solo agregar una línea.            */
+const pad = n => String(n).padStart(2,'0');
+function hex2hsl(hex){
+  let r = parseInt(hex.slice(1,3),16)/255, g = parseInt(hex.slice(3,5),16)/255, b = parseInt(hex.slice(5,7),16)/255;
+  const mx = Math.max(r,g,b), mn = Math.min(r,g,b), l = (mx+mn)/2;
+  let h = 0, s = 0;
+  if(mx !== mn){
+    const d = mx - mn;
+    s = l > .5 ? d/(2-mx-mn) : d/(mx+mn);
+    h = mx === r ? (g-b)/d + (g<b?6:0) : mx === g ? (b-r)/d + 2 : (r-g)/d + 4;
+    h *= 60;
+  }
+  return {h, s, l};
+}
+function hsl2hex(h, s, l){
+  s = Math.max(0, Math.min(1, s)); l = Math.max(0, Math.min(1, l));
+  const c = (1 - Math.abs(2*l - 1)) * s, x = c * (1 - Math.abs((h/60) % 2 - 1)), m = l - c/2;
+  let r = 0, g = 0, b = 0;
+  if(h < 60){ r=c; g=x; } else if(h<120){ r=x; g=c; } else if(h<180){ g=c; b=x; }
+  else if(h<240){ g=x; b=c; } else if(h<300){ r=x; b=c; } else { r=c; b=x; }
+  const f = v => pad(Math.round((v+m)*255).toString(16));
+  return '#' + f(r) + f(g) + f(b);
+}
+const BASES = {
+  rojo:'#e03131',      coral:'#ff6b6b',    vino:'#a61e4d',      rosa:'#d6336c',
+  fucsia:'#e64980',    rosado:'#f783ac',   chicle:'#f06595',    orquidea:'#cc5de8',
+  violeta:'#9c36b5',   ciruela:'#862e9c',  morado:'#7048e8',    indigo:'#6741d9',
+  lavanda:'#9775fa',   azul:'#3b5bdb',     celeste:'#4dabf7',   marino:'#1864ab',
+  cian:'#1098ad',      turquesa:'#22b8cf', teal:'#0ca678',      menta:'#38d9a9',
+  verde:'#2f9e44',     lima:'#66a80f',     oliva:'#87910f',     ambar:'#c99700',
+  durazno:'#ff922b',   naranjo:'#e8590c',  ladrillo:'#bf4526',  cafe:'#9c6644',
+  gris:'#5c6470',      grafito:'#343a40'
 };
+const NOMBRES = {teal:'Verde azulado', indigo:'Índigo', ambar:'Ámbar', cafe:'Café', orquidea:'Orquídea'};
+const PAL = {};
+Object.keys(BASES).forEach(k => {
+  const {h,s} = hex2hsl(BASES[k]);
+  PAL[k] = {
+    n: NOMBRES[k] || k.charAt(0).toUpperCase() + k.slice(1),
+    str: BASES[k],
+    bg: hsl2hex(h, Math.min(.72, s*.82), .945),
+    ink: hsl2hex(h, Math.min(.9, s*1.05), .30)
+  };
+});
 const PAL_IDS = Object.keys(PAL);
 const col = k => PAL[k] || PAL.gris;
 
@@ -365,7 +423,6 @@ const MESES  = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto
 const $  = (s,c) => (c||document).querySelector(s);
 const $$ = (s,c) => Array.from((c||document).querySelectorAll(s));
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,8);
-const pad = n => String(n).padStart(2,'0');
 const esc = s => String(s==null?'':s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
 function iso(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
@@ -382,6 +439,35 @@ function inicioSemana(d){
 }
 function capital(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
+/* franja horaria visible en el calendario */
+function minIni(){ return S.cfg.horaIni * 60; }
+function minFin(){ return S.cfg.horaFin * 60; }
+function rangoMin(){ return minFin() - minIni(); }
+/** posición en % dentro de la franja visible */
+function pos(m){ return (m - minIni()) / rangoMin() * 100; }
+
+/** Acepta 8, 800, 8:30, 8.30, 08:30, "8 30", "8 pm" y devuelve HH:MM */
+function normalizaHora(txt, porDefecto){
+  if(txt == null) return porDefecto || '';
+  let t = String(txt).trim().toLowerCase();
+  if(!t) return porDefecto || '';
+  let pm = /p\.?\s?m/.test(t), am = /a\.?\s?m/.test(t);
+  t = t.replace(/[^0-9:.]/g, '');
+  let h, m = 0;
+  if(t.includes(':') || t.includes('.')){
+    const partes = t.split(/[:.]/);
+    h = parseInt(partes[0], 10); m = parseInt(partes[1] || '0', 10);
+  }else if(t.length <= 2){ h = parseInt(t, 10); }
+  else if(t.length === 3){ h = parseInt(t[0], 10); m = parseInt(t.slice(1), 10); }
+  else { h = parseInt(t.slice(0,2), 10); m = parseInt(t.slice(2,4), 10); }
+  if(isNaN(h)) return porDefecto || '';
+  if(isNaN(m)) m = 0;
+  if(pm && h < 12) h += 12;
+  if(am && h === 12) h = 0;
+  h = Math.max(0, Math.min(23, h)); m = Math.max(0, Math.min(59, m));
+  return pad(h) + ':' + pad(m);
+}
+
 /* ---------- estado ---------- */
 const VACIO = () => ({
   v: 1,
@@ -395,7 +481,7 @@ const VACIO = () => ({
     {id: uid(), sec:'universidad', nombre:'Tareas del semestre', color:'violeta', items:[]}
   ],
   habitos: [],
-  cfg: {diaInicio: 1, cerradas: []}
+  cfg: {diaInicio: 1, horaIni: 7, horaFin: 21, cerradas: []}
 });
 
 let S = VACIO();
@@ -415,12 +501,15 @@ function cargarLocal(){
 }
 function migrar(d){
   const base = VACIO();
+  const cfgBase = Object.assign({}, base.cfg);   // ojo: el assign de abajo pisa base.cfg
   const s = Object.assign(base, d || {});
-  s.cfg = Object.assign(base.cfg, d && d.cfg || {});
+  s.cfg = Object.assign(cfgBase, d && d.cfg || {});
   ['ramos','clases','eventos','listas','habitos'].forEach(k => { if(!Array.isArray(s[k])) s[k] = []; });
   if(!s.ovr || typeof s.ovr !== 'object') s.ovr = {};
   s.listas.forEach((l,i) => { if(!Array.isArray(l.items)) l.items = []; if(!l.color) l.color = PAL_IDS[i % PAL_IDS.length]; if(l.sec !== 'universidad') l.sec = 'pendientes'; });
   s.habitos.forEach(h => { if(!h.log) h.log = {}; if(!Array.isArray(h.dias)) h.dias = [0,1,2,3,4,5,6]; });
+  s.cfg.horaIni = Math.max(0, Math.min(22, +s.cfg.horaIni || 0));
+  s.cfg.horaFin = Math.max(s.cfg.horaIni + 2, Math.min(24, +s.cfg.horaFin || 24));
   return s;
 }
 
@@ -583,7 +672,7 @@ function ocurrencias(desdeIso, hastaIso){
       tipo: e.tipo || 'evento', esClase: false, eventoId: e.id,
       titulo: e.titulo,
       sub: e.lugar || (r ? r.nombre : ''),
-      fecha: e.fecha, inicio: e.inicio, fin: e.fin,
+      fecha: e.fecha, inicio: e.inicio, fin: e.tipo === 'entrega' ? e.inicio : e.fin,
       color: r ? col(r.color) : col(e.color),
       ramoId: e.ramoId,
       hecho: estaHecho(e)
@@ -593,6 +682,9 @@ function ocurrencias(desdeIso, hastaIso){
   out.sort((a,b) => a.fecha.localeCompare(b.fecha) || min(a.inicio) - min(b.inicio) || min(b.fin) - min(a.fin));
   return out;
 }
+
+/** Las entregas son un instante, no un bloque de tiempo. */
+function esHito(o){ return (o.tipo || o) === 'entrega'; }
 
 function estaHecho(e){
   if(e.src && e.src.lista){
@@ -663,17 +755,22 @@ function renderSemana(){
   const ds = diasDeLaSemana();
   const hoy = hoyIso();
   const head = $('#weekHead'), grid = $('#grid');
+  const nHoras = S.cfg.horaFin - S.cfg.horaIni;
   head.style.gridTemplateColumns = grid.style.gridTemplateColumns = 'var(--gutter) repeat(7,1fr)';
 
   head.innerHTML = '<div class="corner"></div>' + ds.map(d => {
     const f = iso(d);
-    return `<div class="dayHead${f===hoy?' hoy':''}" data-f="${f}">
-      <div class="dn">${DIAS_C[d.getDay()]==='X'?'MIÉ':DIAS_L[d.getDay()].slice(0,3).toUpperCase()}</div>
+    return `<div class="dayHead${f===hoy?' hoy':''}${f===diaSel?' sel':''}" data-f="${f}">
+      <div class="dn">${DIAS_L[d.getDay()].slice(0,3).toUpperCase()}</div>
       <div class="dd">${d.getDate()}</div></div>`;
   }).join('');
 
   let gut = '<div class="gutter">';
-  for(let h=1; h<24; h++) gut += `<div class="hl" style="top:${h/24*100}%">${h}:00</div>`;
+  for(let h = S.cfg.horaIni; h <= S.cfg.horaFin; h++){
+    const p = pos(h*60);
+    if(p < 0 || p > 99.9) continue;
+    gut += `<div class="hl${p < .5 ? ' primera' : ''}" style="top:${p}%">${h}:00</div>`;
+  }
   gut += '</div>';
 
   const ocs = ocurrencias(iso(ds[0]), iso(ds[6]));
@@ -681,32 +778,49 @@ function renderSemana(){
   ocs.forEach(o => (porDia[o.fecha] = porDia[o.fecha] || []).push(o));
 
   const cols = ds.map(d => {
-    const f = iso(d);
-    const dow = d.getDay();
-    const items = repartir(porDia[f] || []);
-    const html = items.map(o => bloqueHTML(o)).join('');
-    return `<div class="daycol${dow===0||dow===6?' finde':''}${f===hoy?' hoycol':''}" data-f="${f}">${html}</div>`;
+    const f = iso(d), dow = d.getDay();
+    const todos = porDia[f] || [];
+    const bloques = repartir(todos.filter(o => !esHito(o)));
+    const hitos   = repartir(todos.filter(esHito));
+    return `<div class="daycol${dow===0||dow===6?' finde':''}${f===hoy?' hoycol':''}" data-f="${f}">
+      ${bloques.map(bloqueHTML).join('')}${hitos.map(bloqueHTML).join('')}</div>`;
   }).join('');
 
   grid.innerHTML = gut + cols;
-  $$('.gutter .hl').forEach(el => { el.style.position = 'absolute'; });
-  grid.style.height = 'calc(var(--hour-h) * 24)';
-  $$('#grid > div').forEach(c => c.style.height = '100%');
+  grid.style.height = `max(100%, calc(var(--hour-h) * ${nHoras}))`;
+
+  // que las líneas de hora calcen aunque la grilla se estire para llenar la pantalla
+  requestAnimationFrame(() => {
+    const c = $('.daycol');
+    if(c) grid.style.setProperty('--hour-h', (c.offsetHeight / nHoras) + 'px');
+    lineaAhora();
+  });
 
   lineaAhora();
   ajustarScrollbar();
 }
 
 function bloqueHTML(o){
-  const s = min(o.inicio), e = Math.max(min(o.fin), s + 20), dur = e - s;
-  const c = o.color;
+  const c = o.color, t = TIPOS[o.tipo] || TIPOS.evento;
   const w = 100 / (o._cols || 1), left = (o._col || 0) * w;
-  const t = TIPOS[o.tipo] || TIPOS.evento;
-  const corto = dur <= 35;
+  const estiloComun = `left:calc(${left}% + 2px);width:calc(${w}% - 4px);--c-bg:${c.bg};--c-str:${c.str};--c-ink:${c.ink}`;
+
+  if(esHito(o)){                                   // entregas: un instante, no un bloque
+    const mi = min(o.inicio);
+    const fuera = mi > minFin() ? ' abajo' : mi < minIni() ? ' arriba' : '';
+    const top = Math.max(0, Math.min(100, pos(mi)));
+    return `<div class="ev entrega hito${fuera}${o.hecho?' hecho':''}" data-key="${o.key}"
+      style="top:${top}%;${estiloComun}">
+      <span class="th"><span class="hh">${hLindo(o.inicio)}</span><span class="tag">Entrega</span><span class="ti">${esc(o.titulo)}</span></span></div>`;
+  }
+
+  const s = min(o.inicio), e = Math.max(min(o.fin), s + 20);
+  const top = Math.max(0, Math.min(98, pos(s)));
+  const bot = Math.max(top + 1.2, Math.min(100, pos(e)));
+  const dur = e - s, corto = dur <= 35;
   const sub = o.sub ? esc(o.sub) : '';
   return `<div class="ev ${o.tipo}${corto?' corto':''}${o.hecho?' hecho':''}" data-key="${o.key}"
-    style="top:${s/1440*100}%;height:${dur/1440*100}%;left:calc(${left}% + 2px);width:calc(${w}% - 4px);
-    --c-bg:${c.bg};--c-str:${c.str};--c-ink:${c.ink}">
+    style="top:${top}%;height:${bot-top}%;${estiloComun}">
     <span class="t">${t.tag?`<span class="tag">${t.tag}</span>`:''}${esc(o.titulo)}</span>
     ${corto ? '' : `<span class="s">${hLindo(o.inicio)}–${hLindo(o.fin)}${sub?' · '+sub:''}</span>`}
     <div class="grip"></div></div>`;
@@ -718,22 +832,21 @@ function lineaAhora(){
   const cont = $(`.daycol[data-f="${f}"]`);
   if(!cont) return;
   const m = ahora.getHours()*60 + ahora.getMinutes();
+  if(m < minIni() || m > minFin()) return;
   const l = document.createElement('div');
-  l.id = 'nowLine'; l.style.top = (m/1440*100) + '%';
+  l.id = 'nowLine'; l.style.top = pos(m) + '%';
   cont.appendChild(l);
 }
 
 function ajustarScrollbar(){
   const sc = $('#gridScroll');
-  const w = sc.offsetWidth - sc.clientWidth;
-  $('#weekHead').style.setProperty('--sbw', w + 'px');
+  $('#weekHead').style.setProperty('--sbw', (sc.offsetWidth - sc.clientWidth) + 'px');
 }
 
-let scrollListo = false;
 function scrollAHora(h){
-  const sc = $('#gridScroll');
-  const total = $('#grid').offsetHeight || (24*52);
-  sc.scrollTop = Math.max(0, (h/24) * total - 20);
+  const sc = $('#gridScroll'), grid = $('#grid');
+  const total = grid.offsetHeight || 700;
+  sc.scrollTop = Math.max(0, pos(h*60)/100 * total - 16);
 }
 
 /* ---------- vista mes ---------- */
@@ -760,7 +873,7 @@ function renderMes(){
       <div class="num">${d.getDate()}</div>
       ${vis.map(o => {
         const c = o.color, t = TIPOS[o.tipo] || TIPOS.evento;
-        return `<div class="chip ${o.tipo}" data-key="${o.key}" style="--c-bg:${c.bg};--c-str:${c.str};--c-ink:${c.ink}">
+        return `<div class="chip ${o.tipo}${o.hecho?' hecho':''}" data-key="${o.key}" style="--c-bg:${c.bg};--c-str:${c.str};--c-ink:${c.ink}">
           <span class="h">${hLindo(o.inicio)}</span> ${t.tag?t.tag+': ':''}${esc(o.titulo)}</div>`;
       }).join('')}
       ${items.length > vis.length ? `<div class="mas">+${items.length-vis.length} más</div>` : ''}
@@ -777,8 +890,7 @@ function renderCal(){
   if(vista === 'semana'){
     const st = $('#gridScroll').scrollTop;
     renderSemana();
-    if(!scrollListo){ scrollAHora(7.5); scrollListo = true; }
-    else $('#gridScroll').scrollTop = st;
+    $('#gridScroll').scrollTop = st;
   }else renderMes();
 }
 
@@ -788,9 +900,8 @@ function renderCal(){
 let arrastre = null;
 
 function ocurrenciaPorKey(key){
-  const ds = vista === 'semana' ? diasDeLaSemana() : null;
   let a, b;
-  if(ds){ a = iso(ds[0]); b = iso(ds[6]); }
+  if(vista === 'semana'){ const ds = diasDeLaSemana(); a = iso(ds[0]); b = iso(ds[6]); }
   else{
     const ini = inicioSemana(new Date(ancla.getFullYear(), ancla.getMonth(), 1));
     a = iso(ini); b = iso(addDias(ini,41));
@@ -800,18 +911,19 @@ function ocurrenciaPorKey(key){
 
 $('#grid').addEventListener('pointerdown', ev => {
   const blo = ev.target.closest('.ev');
-  const col = ev.target.closest('.daycol');
-  if(!col || !blo) return;
+  const cel = ev.target.closest('.daycol');
+  if(!cel || !blo) return;
   if(ev.button && ev.button !== 0) return;
 
   const o = ocurrenciaPorKey(blo.dataset.key);
   if(!o) return;
-  const rect = col.getBoundingClientRect();
+  const rect = cel.getBoundingClientRect();
   arrastre = {
-    el: blo, o, modo: ev.target.classList.contains('grip') ? 'resize' : 'mover',
+    el: blo, o,
+    modo: (ev.target.classList.contains('grip') && !esHito(o)) ? 'resize' : 'mover',
     x0: ev.clientX, y0: ev.clientY, movido: false,
-    hpx: rect.height, ancho: rect.width,
-    ini0: min(o.inicio), fin0: Math.max(min(o.fin), min(o.inicio)+20),
+    hpx: rect.height,
+    ini0: min(o.inicio), fin0: esHito(o) ? min(o.inicio) : Math.max(min(o.fin), min(o.inicio)+20),
     fecha0: o.fecha, fecha: o.fecha,
     cols: $$('.daycol').map(c => ({f: c.dataset.f, r: c.getBoundingClientRect()}))
   };
@@ -826,32 +938,31 @@ $('#grid').addEventListener('pointermove', ev => {
     if(Math.abs(dx) < 4 && Math.abs(dy) < 5) return;
     a.movido = true; a.el.classList.add('dragging');
   }
-  const dmin = Math.round((dy / a.hpx * 1440) / SNAP) * SNAP;
+  const dmin = Math.round((dy / a.hpx * rangoMin()) / SNAP) * SNAP;
 
   if(a.modo === 'mover'){
-    let ini = Math.max(0, Math.min(1440 - (a.fin0 - a.ini0), a.ini0 + dmin));
-    let fin = ini + (a.fin0 - a.ini0);
+    const largo = a.fin0 - a.ini0;
+    let ini = Math.max(0, Math.min(1440 - largo, a.ini0 + dmin));
+    a.ini = ini; a.fin = ini + largo;
+    a.el.style.top = Math.max(0, Math.min(99, pos(ini))) + '%';
     const c = a.cols.find(c => ev.clientX >= c.r.left && ev.clientX <= c.r.right);
     a.fecha = c ? c.f : a.fecha0;
-    a.ini = ini; a.fin = fin;
-    a.el.style.top = (ini/1440*100) + '%';
     if(c && c.f !== a.el.parentElement.dataset.f){
-      const destino = $(`.daycol[data-f="${c.f}"]`);
-      destino.appendChild(a.el);
+      $(`.daycol[data-f="${c.f}"]`).appendChild(a.el);
       a.el.style.left = '2px'; a.el.style.width = 'calc(100% - 4px)';
     }
   }else{
-    let fin = Math.max(a.ini0 + 15, Math.min(1440, a.fin0 + dmin));
+    const fin = Math.max(a.ini0 + 15, Math.min(1440, a.fin0 + dmin));
     a.ini = a.ini0; a.fin = fin;
-    a.el.style.height = ((fin - a.ini0)/1440*100) + '%';
+    a.el.style.height = Math.max(1.2, pos(fin) - pos(a.ini0)) + '%';
   }
-  const et = $('.t', a.el);
-  if(et && !a._orig) a._orig = et.textContent;
   const s = $('.s', a.el);
   if(s) s.textContent = hLindo(hmReal(a.ini)) + '–' + hLindo(hmReal(a.fin));
+  const hh = $('.hh', a.el);
+  if(hh) hh.textContent = hLindo(hmReal(a.ini));
 });
 
-async function terminarArrastre(ev){
+async function terminarArrastre(){
   const a = arrastre; if(!a) return;
   arrastre = null;
   a.el.classList.remove('dragging');
@@ -867,7 +978,6 @@ async function terminarArrastre(ev){
     if(alcance === 'todos'){
       c.inicio = nuevo.inicio; c.fin = nuevo.fin;
       if(nuevo.fecha !== a.fecha0) c.dia = deIso(nuevo.fecha).getDay();
-      // al mover toda la serie se borran los cambios sueltos de horario
       Object.keys(S.ovr).forEach(k => { if(k.startsWith(c.id+'|') && !S.ovr[k].cancel) delete S.ovr[k]; });
       toast('Se movió la clase de todas las semanas');
     }else{
@@ -878,6 +988,7 @@ async function terminarArrastre(ev){
   }else{
     const e = S.eventos.find(x => x.id === a.o.eventoId);
     Object.assign(e, nuevo);
+    if(e.tipo === 'entrega') e.fin = e.inicio;
   }
   guardar();
 }
@@ -887,10 +998,11 @@ $('#grid').addEventListener('pointercancel', () => { if(arrastre){ arrastre = nu
 /* clic en un espacio vacío del calendario -> crear evento ahí */
 $('#grid').addEventListener('click', ev => {
   if(ev.target.closest('.ev')) return;
-  const col = ev.target.closest('.daycol'); if(!col) return;
-  const rect = col.getBoundingClientRect();
-  const m = Math.floor(((ev.clientY - rect.top) / rect.height * 1440) / 30) * 30;
-  abrirEvento(null, {fecha: col.dataset.f, inicio: hmReal(m), fin: hmReal(Math.min(1380, m) + 60)});
+  const cel = ev.target.closest('.daycol'); if(!cel) return;
+  const rect = cel.getBoundingClientRect();
+  const bruto = minIni() + (ev.clientY - rect.top) / rect.height * rangoMin();
+  const m = Math.max(0, Math.min(1380, Math.floor(bruto / 30) * 30));
+  abrirEvento(null, {fecha: cel.dataset.f, inicio: hmReal(m), fin: hmReal(m + 60)});
 });
 
 /* ---------- clics en la vista mes ---------- */
@@ -898,11 +1010,11 @@ $('#mesGrid').addEventListener('click', ev => {
   const chip = ev.target.closest('.chip');
   if(chip){ const o = ocurrenciaPorKey(chip.dataset.key); if(o) abrirEvento(o); return; }
   const cell = ev.target.closest('.mcell');
-  if(cell){ ancla = deIso(cell.dataset.f); vista = 'semana'; sincronizarBotonesVista(); render(); }
+  if(cell){ ancla = deIso(cell.dataset.f); diaSel = cell.dataset.f; vista = 'semana'; sincronizarBotonesVista(); render(); }
 });
 $('#weekHead').addEventListener('click', ev => {
   const d = ev.target.closest('.dayHead');
-  if(d){ diaSel = d.dataset.f; renderSide(); }
+  if(d){ diaSel = d.dataset.f; render(); }
 });
 </script>
 <script>
@@ -914,9 +1026,12 @@ $('#weekHead').addEventListener('click', ev => {
 const ICO = {
   check: '<svg viewBox="0 0 12 12" fill="none"><path d="M2 6.3 4.6 9 10 3.2" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   cal:   '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2" y="3.2" width="12" height="11" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M2 6.6h12M5.4 1.8v2.6M10.6 1.8v2.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M8 8.6v3.4M6.3 10.3h3.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>',
-  mas:   '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 3.5v9M3.5 8h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>',
+  mas:   '<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 3.5v9M3.5 8h9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>',
   puntos:'<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><circle cx="3.2" cy="8" r="1.35"/><circle cx="8" cy="8" r="1.35"/><circle cx="12.8" cy="8" r="1.35"/></svg>'
 };
+
+/* qué fila de "agregar" está abierta: id de lista, 'hab', o null */
+let addAbierto = null;
 
 function eventosDeItem(listaId, itemId){
   return S.eventos.filter(e => e.src && e.src.lista === listaId && e.src.item === itemId);
@@ -937,9 +1052,10 @@ function fechaCorta(f){
 
 function itemHTML(l, it){
   const ev = proximoDeItem(l.id, it.id);
+  const marca = ev ? (ev.tipo === 'entrega' ? '⚑ ' : '') + fechaCorta(ev.fecha) + ' · ' + hLindo(ev.inicio) : '';
   return `<div class="it${it.hecho?' done':''}" data-lista="${l.id}" data-item="${it.id}">
     <button class="cbx" data-act="check" aria-label="Marcar">${ICO.check}</button>
-    <div class="tx" data-act="editar">${esc(it.texto)}${ev?`<small>${fechaCorta(ev.fecha)} · ${hLindo(ev.inicio)}</small>`:''}</div>
+    <div class="tx" data-act="editar"><span class="tt">${esc(it.texto)}</span>${marca?`<small>${marca}</small>`:''}</div>
     <div class="acts">
       <button class="iact" data-act="agendar" title="Poner en el calendario">${ICO.cal}</button>
       <button class="iact" data-act="menu" title="Más">${ICO.puntos}</button>
@@ -947,23 +1063,32 @@ function itemHTML(l, it){
   </div>`;
 }
 
+function filaAgregar(clave, ph){
+  return addAbierto === clave
+    ? `<div class="addrow"><input type="text" placeholder="${ph}" data-add="${clave}"></div>` : '';
+}
+
 function renderListas(sec){
   const cont = $(`[data-listas="${sec}"]`);
   const listas = S.listas.filter(l => l.sec === sec);
   cont.innerHTML = listas.map(l => {
+    const r = l.ramoId ? ramoDe(l.ramoId) : null;
+    const c = col(r ? r.color : l.color);
     const pend = l.items.filter(i => !i.hecho).length;
     const items = l.items.slice().sort((a,b) => (a.hecho?1:0) - (b.hecho?1:0));
     return `<div class="lista" data-lista="${l.id}">
       <div class="lh">
-        <span class="dotc" style="width:9px;height:9px;border-radius:3px;background:${col(l.color).str}"></span>
+        <span class="dotc" style="width:9px;height:9px;border-radius:3px;background:${c.str}"></span>
         <span class="nm">${esc(l.nombre)}</span>
         <span class="n">${pend||''}</span>
+        <button class="iact" data-act="add-item" title="Agregar tarea">${ICO.mas}</button>
         <button class="iact" data-act="menu-lista" title="Opciones">${ICO.puntos}</button>
       </div>
-      ${items.length ? items.map(it => itemHTML(l,it)).join('') : '<div class="vacio">Sin nada pendiente</div>'}
-      <div class="addrow"><input type="text" placeholder="Agregar…" data-add="${l.id}"></div>
+      ${items.length ? items.map(it => itemHTML(l,it)).join('') : (addAbierto === l.id ? '' : '<div class="vacio">Sin nada pendiente</div>')}
+      ${filaAgregar(l.id, 'Nueva tarea…')}
     </div>`;
-  }).join('') + `<button class="btn sm newlist" data-nueva-lista="${sec}">+ Nueva lista</button>`;
+  }).join('') + (listas.length ? '' : '<div class="vacio">Todavía no hay listas. Usa el + de arriba.</div>')
+    + filaAgregar('nueva:' + sec, 'Nombre de la lista…');
 
   const cnt = $(`[data-sec="${sec}"] .count`);
   const total = listas.reduce((a,l) => a + l.items.filter(i => !i.hecho).length, 0);
@@ -992,8 +1117,8 @@ function renderHabitos(){
           <button class="iact" data-act="agendar-hab" title="Poner en el calendario">${ICO.cal}</button>
           <button class="iact" data-act="menu-hab" title="Más">${ICO.puntos}</button>
         </div>
-      </div>`).join('') : '<div class="vacio">No hay hábitos para este día</div>'}
-    <div class="addrow"><input type="text" placeholder="Agregar hábito…" data-add-hab="1"></div>`;
+      </div>`).join('') : (addAbierto === 'hab' ? '' : '<div class="vacio">No hay hábitos para este día</div>')}
+    ${filaAgregar('hab', 'Nuevo hábito…')}`;
 
   $('[data-sec="habitos"] .count').textContent = delDia.length ? `${hechos}/${delDia.length}` : '';
 }
@@ -1003,24 +1128,37 @@ function renderSide(){
   renderHabitos();
   renderListas('universidad');
   S.cfg.cerradas.forEach(s => { const c = $(`[data-sec="${s}"]`); if(c) c.classList.add('cerrada'); });
+  const inp = addAbierto && $(`[data-add="${addAbierto}"]`);
+  if(inp) inp.focus();
+}
+
+function abrirAgregar(clave){
+  addAbierto = (addAbierto === clave) ? null : clave;
+  const card = clave === 'hab' ? $('[data-sec="habitos"]')
+             : String(clave).startsWith('nueva:') ? $(`[data-sec="${String(clave).split(':')[1]}"]`)
+             : null;
+  if(card) card.classList.remove('cerrada');
+  renderSide();
 }
 
 /* ---------- interacciones de la barra lateral ---------- */
 $('#side').addEventListener('click', ev => {
-  const h3 = ev.target.closest('.card > h3');
-  if(h3){
-    const card = h3.parentElement, sec = card.dataset.sec;
-    card.classList.toggle('cerrada');
-    S.cfg.cerradas = $$('.card.cerrada').map(c => c.dataset.sec);
-    guardar(false);
+  const act = ev.target.closest('[data-act]');
+  const tipo = act && act.dataset.act;
+
+  if(tipo === 'nueva-lista'){ abrirAgregar('nueva:' + act.dataset.sec); return; }
+  if(tipo === 'nuevo-habito'){ abrirAgregar('hab'); return; }
+
+  if(!act){
+    const h3 = ev.target.closest('.card > h3');
+    if(h3){
+      const card = h3.parentElement;
+      card.classList.toggle('cerrada');
+      S.cfg.cerradas = $$('.card.cerrada').map(c => c.dataset.sec);
+      guardar(false);
+    }
     return;
   }
-  const btnNueva = ev.target.closest('[data-nueva-lista]');
-  if(btnNueva){ abrirLista(null, btnNueva.dataset.nuevaLista); return; }
-
-  const act = ev.target.closest('[data-act]');
-  if(!act) return;
-  const tipo = act.dataset.act;
 
   // hábitos
   const filaH = act.closest('[data-habito]');
@@ -1052,6 +1190,8 @@ $('#side').addEventListener('click', ev => {
   const lista = S.listas.find(l => l.id === filaL.dataset.lista);
   if(!lista) return;
 
+  if(tipo === 'add-item'){ abrirAgregar(lista.id); return; }
+
   if(tipo === 'menu-lista'){
     menu(act, [
       {t:'Renombrar / color', f:() => abrirLista(lista)},
@@ -1078,12 +1218,12 @@ $('#side').addEventListener('click', ev => {
 
   if(tipo === 'check'){ it.hecho = !it.hecho; it.fechaHecho = it.hecho ? hoyIso() : null; guardar(); return; }
   if(tipo === 'agendar'){ abrirAgendar({lista, item: it}); return; }
-  if(tipo === 'editar'){ editarEnLinea(filaI, it, lista); return; }
+  if(tipo === 'editar'){ editarEnLinea(filaI, it); return; }
   if(tipo === 'menu'){
     const evs = eventosDeItem(lista.id, it.id);
     menu(act, [
-      {t:'Editar texto', f:() => editarEnLinea(filaI, it, lista)},
-      {t:'Poner en el calendario', f:() => abrirAgendar({lista, item: it})},
+      {t:'Editar texto', f:() => editarEnLinea(filaI, it)},
+      {t: evs.length ? 'Agregar otra fecha al calendario' : 'Poner en el calendario', f:() => abrirAgendar({lista, item: it})},
       ...(evs.length ? [{t:'Quitar del calendario', f:() => {
         S.eventos = S.eventos.filter(e => !(e.src && e.src.lista === lista.id && e.src.item === it.id));
         guardar(); toast('Se quitó del calendario, sigue en la lista');
@@ -1097,36 +1237,57 @@ $('#side').addEventListener('click', ev => {
   }
 });
 
-function editarEnLinea(fila, it, lista){
+function editarEnLinea(fila, it){
   const tx = $('.tx', fila);
   const inp = document.createElement('input');
   inp.type = 'text'; inp.value = it.texto;
   inp.style.cssText = 'flex:1;min-width:0;height:26px;border:1px solid var(--accent);border-radius:7px;padding:0 7px;font-size:13.5px;outline:none';
   tx.replaceWith(inp); inp.focus(); inp.select();
   const fin = guardarlo => {
-    if(guardarlo && inp.value.trim()){ it.texto = inp.value.trim(); guardar(); }
-    else render();
+    if(guardarlo && inp.value.trim()){
+      it.texto = inp.value.trim();
+      // si esa tarea es una entrega del calendario, se renombra también ahí
+      S.eventos.forEach(e => { if(e.src && e.src.item === it.id) e.titulo = it.texto; });
+      guardar();
+    }else render();
   };
   inp.addEventListener('keydown', e => { if(e.key === 'Enter') fin(true); if(e.key === 'Escape') fin(false); });
   inp.addEventListener('blur', () => fin(true));
 }
 
+/* la fila de "agregar" se cierra al salir de ella si quedó vacía */
+$('#side').addEventListener('focusout', ev => {
+  const inp = ev.target;
+  if(!inp.dataset || !inp.dataset.add) return;
+  setTimeout(() => {
+    const activo = document.activeElement;
+    if(activo && activo.dataset && activo.dataset.add) return;
+    if(!inp.value.trim() && addAbierto === inp.dataset.add){ addAbierto = null; renderSide(); }
+  }, 120);
+});
+
 $('#side').addEventListener('keydown', ev => {
   const inp = ev.target;
+  if(!inp.dataset || !inp.dataset.add) return;
+  if(ev.key === 'Escape'){ addAbierto = null; renderSide(); return; }
   if(ev.key !== 'Enter') return;
-  if(inp.dataset.add){
-    const l = S.listas.find(x => x.id === inp.dataset.add);
-    const t = inp.value.trim(); if(!l || !t) return;
+  const clave = inp.dataset.add, t = inp.value.trim();
+  if(!t) return;
+
+  if(clave === 'hab'){
+    S.habitos.push({id: uid(), nombre: t, color: PAL_IDS[(S.habitos.length*5) % PAL_IDS.length], dias:[0,1,2,3,4,5,6], log:{}});
+  }else if(clave.startsWith('nueva:')){
+    const sec = clave.split(':')[1];
+    const nueva = {id: uid(), sec, nombre: t, color: PAL_IDS[(S.listas.length*7) % PAL_IDS.length], items: []};
+    S.listas.push(nueva);
+    addAbierto = nueva.id;                       // sigue con las tareas de la lista recién creada
+  }else{
+    const l = S.listas.find(x => x.id === clave);
+    if(!l) return;
     l.items.push({id: uid(), texto: t, hecho: false});
-    inp.value = ''; guardar();
-    setTimeout(() => { const n = $(`[data-add="${l.id}"]`); if(n) n.focus(); }, 0);
   }
-  if(inp.dataset.addHab){
-    const t = inp.value.trim(); if(!t) return;
-    S.habitos.push({id: uid(), nombre: t, color: PAL_IDS[S.habitos.length % PAL_IDS.length], dias:[0,1,2,3,4,5,6], log:{}});
-    inp.value = ''; guardar();
-    setTimeout(() => { const n = $('[data-add-hab]'); if(n) n.focus(); }, 0);
-  }
+  inp.value = '';
+  guardar();
 });
 
 /* ---------- menú contextual ---------- */
@@ -1164,9 +1325,19 @@ function modal(html, opts){
   document.addEventListener('keydown', esc_);
   ov.addEventListener('pointerdown', e => { if(e.target === ov) cerrar(); });
   $$('[data-cerrar]', ov).forEach(b => b.onclick = cerrar);
-  const primero = $('input:not([type=hidden]),textarea', ov);
+  // los campos de hora se ordenan solos al salir de ellos
+  $$('[data-hora]', ov).forEach(inp => {
+    inp.addEventListener('blur', () => { inp.value = normalizaHora(inp.value, inp.dataset.hora); });
+    inp.addEventListener('keydown', e => { if(e.key === 'Enter') inp.blur(); });
+  });
+  const primero = $('input:not([type=hidden]):not([data-hora]),textarea', ov);
   if(primero && !(opts && opts.sinFoco)) setTimeout(() => primero.focus(), 30);
   return {ov, cerrar};
+}
+function leerHora(ov, sel, porDefecto){ return normalizaHora($(sel, ov).value, porDefecto); }
+function campoHora(id, val, label){
+  return `<div class="f"><label>${label}</label>
+    <input type="text" id="${id}" value="${val}" data-hora="${val}" inputmode="numeric" placeholder="10:00" autocomplete="off"></div>`;
 }
 
 function confirmar(msg){
@@ -1210,6 +1381,26 @@ function opcionesRamo(sel){
     S.ramos.map(r => `<option value="${r.id}"${r.id===sel?' selected':''}>${esc(r.nombre)}</option>`).join('');
 }
 
+/* ---------- listas de tareas ligadas a un ramo ---------- */
+function listaDeRamo(ramoId){ return S.listas.find(l => l.sec === 'universidad' && l.ramoId === ramoId) || null; }
+function crearListaDeRamo(ramoId){
+  const r = ramoDe(ramoId);
+  const l = {id: uid(), sec:'universidad', nombre: r ? r.nombre : 'Entregas', color: r ? r.color : 'violeta', ramoId, items: []};
+  S.listas.push(l);
+  return l;
+}
+function opcionesListaTareas(evento, ramoId){
+  const actual = evento && evento.src ? evento.src.lista : null;
+  const deRamo = ramoId ? listaDeRamo(ramoId) : null;
+  const univ = S.listas.filter(l => l.sec === 'universidad');
+  let html = '';
+  if(ramoId && !deRamo) html += `<option value="auto">Crear lista "${esc((ramoDe(ramoId)||{}).nombre||'')}"</option>`;
+  html += univ.map(l => `<option value="${l.id}"${l.id === (actual || (deRamo && deRamo.id))?' selected':''}>${esc(l.nombre)}</option>`).join('');
+  if(!univ.length && !ramoId) html = `<option value="auto">Crear lista "Entregas"</option>` + html;
+  html += `<option value="">— no agregarla a ninguna lista —</option>`;
+  return html;
+}
+
 /* ============================================================
    Crear / editar evento
    ============================================================ */
@@ -1231,11 +1422,16 @@ function abrirEvento(o, preset){
     color: editando ? (esClase ? (clase.color || 'azul') : (evento.color || 'azul')) : 'azul',
     repetir: editando ? esClase : true
   };
-  const bloqueado = evento && evento.src;   // vino de una lista o de un hábito
+  const deLista = evento && evento.src && evento.src.lista && evento.tipo !== 'entrega';
+  const itemLigado = (() => {
+    if(!evento || !evento.src || !evento.src.lista) return null;
+    const l = S.listas.find(x => x.id === evento.src.lista);
+    return l ? {lista: l, item: l.items.find(i => i.id === evento.src.item)} : null;
+  })();
 
   const m = modal(`
     <h2>${editando ? 'Editar' : 'Nuevo'} ${editando ? (TIPOS[d.tipo]||TIPOS.evento).n.toLowerCase() : 'evento'}</h2>
-    ${bloqueado ? `<p class="nota" style="margin-bottom:12px">Este bloque viene de tu lista. Si lo eliminas, solo sale del calendario y sigue en la lista.</p>` : ''}
+    ${deLista ? `<p class="nota" style="margin-bottom:12px">Este bloque viene de tu lista. Si lo eliminas, solo sale del calendario y sigue en la lista.</p>` : ''}
     ${editando ? '' : `<div class="f"><label>Tipo</label><div class="tipos">
       ${['clase','prueba','entrega','evento'].map(t =>
         `<button type="button" data-tipo="${t}"${t===d.tipo?' class="on"':''}><span class="ic">${TIPOS[t].ic}</span>${TIPOS[t].n}</button>`).join('')}
@@ -1254,9 +1450,16 @@ function abrirEvento(o, preset){
 
     <div class="row">
       <div class="f"><label>Fecha</label><input type="date" id="mFecha" value="${d.fecha}"></div>
-      <div class="f"><label>Desde</label><input type="time" id="mIni" value="${d.inicio}" step="300"></div>
-      <div class="f"><label>Hasta</label><input type="time" id="mFin" value="${d.fin}" step="300"></div>
+      ${campoHora('mIni', d.inicio, 'Hora')}
+      <div id="fFin" style="flex:1">${campoHora('mFin', d.fin, 'Hasta').replace('<div class="f">','<div class="f" style="margin:0">')}</div>
     </div>
+    <p class="nota hidden" id="notaEntrega" style="margin:-4px 0 12px">Las entregas se marcan en la hora exacta del plazo.</p>
+
+    <div class="f hidden" id="fLista"><label>Ponerla también como tarea en</label>
+      <select id="mLista"></select></div>
+
+    ${itemLigado && itemLigado.item ? `<label class="chk" style="margin-bottom:10px">
+      <input type="checkbox" id="mHecha"${itemLigado.item.hecho?' checked':''}> Ya la hice / entregué</label>` : ''}
 
     <div class="f" id="fRepetir"><label class="chk"><input type="checkbox" id="mRepetir"${d.repetir?' checked':''}>
       Se repite todas las semanas <span id="mDiaTxt" style="color:var(--ink-3)"></span></label></div>
@@ -1281,22 +1484,24 @@ function abrirEvento(o, preset){
 
   function refrescar(){
     const conRamo = tipo === 'clase' || tipo === 'prueba' || tipo === 'entrega';
-    $('#fRamo', ov).classList.toggle('hidden', !conRamo);
     const ramoSel = $('#mRamo', ov).value;
+    $('#fRamo', ov).classList.toggle('hidden', !conRamo);
     $('#fColor', ov).classList.toggle('hidden', conRamo && !!ramoSel);
     $('#fRepetir', ov).classList.toggle('hidden', tipo !== 'clase' || editando);
+    $('#fFin', ov).classList.toggle('hidden', tipo === 'entrega');
+    $('#notaEntrega', ov).classList.toggle('hidden', tipo !== 'entrega');
+    $('#fLista', ov).classList.toggle('hidden', tipo !== 'entrega');
+    if(tipo === 'entrega') $('#mLista', ov).innerHTML = opcionesListaTareas(evento, ramoSel);
     $('#lblLugar', ov).textContent = tipo === 'clase' ? 'Sala / lugar' : 'Lugar';
     const f = $('#mFecha', ov).value;
     if(f) $('#mDiaTxt', ov).textContent = '(' + DIAS_L[deIso(f).getDay()].toLowerCase() + ')';
     const t = $('#mTitulo', ov);
-    if(tipo === 'clase' && !t.value) t.placeholder = 'Se usa el nombre del ramo si lo dejas vacío';
+    if(!t.value) t.placeholder = tipo === 'clase' ? 'Se usa el nombre del ramo si lo dejas vacío'
+                 : tipo === 'entrega' ? 'Ej: Tarea 1' : tipo === 'prueba' ? 'Ej: Prueba 1' : 'Ej: Hora al doctor';
   }
   $$('[data-tipo]', ov).forEach(b => b.onclick = () => {
     $$('[data-tipo]', ov).forEach(x => x.classList.remove('on'));
-    b.classList.add('on'); tipo = b.dataset.tipo;
-    const t = $('#mTitulo', ov);
-    if(!t.value && tipo === 'entrega') t.placeholder = 'Ej: Entrega Proyecto 1';
-    refrescar();
+    b.classList.add('on'); tipo = b.dataset.tipo; refrescar();
   });
   $('#mRamo', ov).onchange = refrescar;
   $('#mFecha', ov).onchange = refrescar;
@@ -1307,10 +1512,11 @@ function abrirEvento(o, preset){
     $('#mRamo', ov).innerHTML = opcionesRamo(r.id); refrescar();
   });
 
-  $('#mIni', ov).onchange = () => {
-    const i = min($('#mIni', ov).value), f = min($('#mFin', ov).value);
+  $('#mIni', ov).addEventListener('blur', () => {
+    const i = min(normalizaHora($('#mIni', ov).value, d.inicio));
+    const f = min(normalizaHora($('#mFin', ov).value, d.fin));
     if(f <= i) $('#mFin', ov).value = hmReal(Math.min(1439, i + 60));
-  };
+  });
 
   if(esClase){
     $('#mSinClase', ov).onclick = () => {
@@ -1324,21 +1530,23 @@ function abrirEvento(o, preset){
     const ramoId = (tipo === 'clase' || tipo === 'prueba' || tipo === 'entrega') ? $('#mRamo', ov).value : '';
     const color = colorElegido(ov);
     const fecha = $('#mFecha', ov).value || diaSel;
-    const inicio = $('#mIni', ov).value || '09:00';
-    let fin = $('#mFin', ov).value || '10:00';
-    if(min(fin) <= min(inicio)) fin = hmReal(Math.min(1439, min(inicio) + 60));
+    const inicio = leerHora(ov, '#mIni', d.inicio);
+    let fin = tipo === 'entrega' ? inicio : leerHora(ov, '#mFin', d.fin);
+    if(tipo !== 'entrega' && min(fin) <= min(inicio)) fin = hmReal(Math.min(1439, min(inicio) + 60));
     const lugar = $('#mLugar', ov).value.trim();
     const notas = $('#mNotas', ov).value.trim();
     const r = ramoDe(ramoId);
     if(!titulo && !r && tipo !== 'clase'){ toast('Ponle un título'); return; }
+    const tituloFinal = titulo || (r ? r.nombre : 'Evento');
 
+    let ev = evento;
     if(!editando){
       if(tipo === 'clase' && $('#mRepetir', ov).checked){
         S.clases.push({id: uid(), ramoId, titulo, dia: deIso(fecha).getDay(), inicio, fin,
                        sala: lugar, notas, color, desde: null, hasta: null});
       }else{
-        S.eventos.push({id: uid(), tipo, titulo: titulo || (r ? r.nombre : 'Evento'), ramoId, color,
-                        fecha, inicio, fin, lugar, notas});
+        ev = {id: uid(), tipo, titulo: tituloFinal, ramoId, color, fecha, inicio, fin, lugar, notas};
+        S.eventos.push(ev);
       }
     }else if(esClase){
       const alcance = $('#mAlcance', ov).value;
@@ -1347,15 +1555,22 @@ function abrirEvento(o, preset){
         Object.keys(S.ovr).forEach(k => { if(k.startsWith(clase.id+'|') && !S.ovr[k].cancel) delete S.ovr[k]; });
       }else{
         S.ovr[claveOvr(clase.id, o.fechaBase)] = Object.assign({}, S.ovr[claveOvr(clase.id, o.fechaBase)],
-          {inicio, fin, fecha, titulo, sala: lugar});
-        // los cambios de nombre solo de una semana se guardan como evento aparte
+          {inicio, fin, fecha, sala: lugar});
         if(titulo && titulo !== clase.titulo){
           S.ovr[claveOvr(clase.id, o.fechaBase)].cancel = true;
           S.eventos.push({id: uid(), tipo:'clase', titulo, ramoId: clase.ramoId, color, fecha, inicio, fin, lugar, notas});
         }
       }
     }else{
-      Object.assign(evento, {tipo, titulo: titulo || evento.titulo, ramoId, color, fecha, inicio, fin, lugar, notas});
+      Object.assign(evento, {tipo, titulo: tituloFinal, ramoId, color, fecha, inicio, fin, lugar, notas});
+    }
+
+    // entregas: mantenerlas como tarea con check en la barra lateral
+    if(tipo === 'entrega' && ev) vincularEntrega(ev, $('#mLista', ov).value);
+
+    if($('#mHecha', ov) && itemLigado && itemLigado.item){
+      itemLigado.item.hecho = $('#mHecha', ov).checked;
+      itemLigado.item.fechaHecho = itemLigado.item.hecho ? hoyIso() : null;
     }
     m.cerrar(); guardar();
   };
@@ -1373,11 +1588,41 @@ function abrirEvento(o, preset){
         }}
       ]);
     }else{
-      if(!await confirmar(bloqueado ? '¿Sacarlo del calendario? Se queda en tu lista.' : '¿Eliminar este evento?')) return;
+      const ligada = evento.src && evento.src.lista;
+      if(!await confirmar(ligada ? '¿Sacarlo del calendario? La tarea se queda en tu lista.' : '¿Eliminar este evento?')) return;
       S.eventos = S.eventos.filter(e => e.id !== evento.id);
       m.cerrar(); guardar();
     }
   };
+}
+
+/** Deja la entrega también como tarea con check en una lista de Universidad. */
+function vincularEntrega(ev, eleccion){
+  const antes = ev.src && ev.src.lista ? S.listas.find(l => l.id === ev.src.lista) : null;
+  const itemAntes = antes ? antes.items.find(i => i.id === ev.src.item) : null;
+
+  if(eleccion === ''){                       // no quiere lista
+    delete ev.src;
+    return;
+  }
+  let lista;
+  if(eleccion === 'auto' || !eleccion) lista = listaDeRamo(ev.ramoId) || crearListaDeRamo(ev.ramoId);
+  else lista = S.listas.find(l => l.id === eleccion) || crearListaDeRamo(ev.ramoId);
+
+  if(itemAntes && antes.id === lista.id){    // misma lista: solo actualizar el texto
+    itemAntes.texto = ev.titulo;
+    return;
+  }
+  if(itemAntes && antes.id !== lista.id){    // se cambió de lista: mover la tarea
+    antes.items = antes.items.filter(i => i.id !== itemAntes.id);
+    lista.items.push(itemAntes);
+    itemAntes.texto = ev.titulo;
+    ev.src = {lista: lista.id, item: itemAntes.id};
+    return;
+  }
+  const it = {id: uid(), texto: ev.titulo, hecho: false};
+  lista.items.push(it);
+  ev.src = {lista: lista.id, item: it.id};
 }
 
 function menuEnCentro(ops){
@@ -1394,15 +1639,16 @@ function menuEnCentro(ops){
    ============================================================ */
 function abrirAgendar(src){
   const nombre = src.habito ? src.habito.nombre : src.item.texto;
-  const colorDefault = src.habito ? src.habito.color : (src.lista.color || 'azul');
+  const r = (!src.habito && src.lista.ramoId) ? ramoDe(src.lista.ramoId) : null;
+  const colorDefault = src.habito ? src.habito.color : (r ? r.color : (src.lista.color || 'azul'));
   const ahora = new Date();
   const iniSug = hmReal(Math.min(1380, (Math.floor((ahora.getHours()*60 + ahora.getMinutes())/30)+1)*30));
 
   const m = modal(`<h2>Poner en el calendario</h2>
     <p class="nota" style="margin-bottom:14px">“${esc(nombre)}” se queda igual en tu lista; esto solo agrega el bloque al calendario.</p>
     <div class="row">
-      <div class="f"><label>Fecha</label><input type="date" id="aFecha" value="${src.habito ? diaSel : diaSel}"></div>
-      <div class="f"><label>Hora</label><input type="time" id="aIni" value="${iniSug}" step="300"></div>
+      <div class="f"><label>Fecha</label><input type="date" id="aFecha" value="${diaSel}"></div>
+      ${campoHora('aIni', iniSug, 'Hora')}
     </div>
     <div class="f"><label>Duración</label>
       <div class="tipos" style="grid-template-columns:repeat(4,1fr)">
@@ -1411,7 +1657,7 @@ function abrirAgendar(src){
     <div class="f"><label>Color</label>${swatchesHTML(colorDefault)}</div>
     <div class="acciones"><div class="spacer"></div>
       <button class="btn" data-cerrar>Cancelar</button>
-      <button class="btn primary" id="aGuardar">Agregar</button></div>`);
+      <button class="btn primary" id="aGuardar">Agregar</button></div>`, {sinFoco:true});
 
   let dur = 60;
   $$('[data-dur]', m.ov).forEach(b => b.onclick = () => {
@@ -1422,7 +1668,7 @@ function abrirAgendar(src){
 
   $('#aGuardar', m.ov).onclick = () => {
     const fecha = $('#aFecha', m.ov).value || hoyIso();
-    const inicio = $('#aIni', m.ov).value || '09:00';
+    const inicio = leerHora(m.ov, '#aIni', iniSug);
     S.eventos.push({
       id: uid(), tipo: src.habito ? 'habito' : 'tarea',
       titulo: nombre, color: colorElegido(m.ov), ramoId: '',
@@ -1483,6 +1729,7 @@ function abrirRamos(){
       S.clases = S.clases.filter(c => c.ramoId !== r.id);
       Object.keys(S.ovr).forEach(k => { if(ids.includes(k.split('|')[0])) delete S.ovr[k]; });
       S.eventos.forEach(e => { if(e.ramoId === r.id){ e.ramoId = ''; e.color = r.color; } });
+      S.listas.forEach(l => { if(l.ramoId === r.id){ l.ramoId = null; l.color = r.color; } });
       S.ramos = S.ramos.filter(x => x.id !== r.id);
       m.cerrar(); guardar(); abrirRamos();
     };
@@ -1494,9 +1741,13 @@ function abrirRamos(){
    ============================================================ */
 function abrirLista(l, sec){
   const nuevo = !l;
+  const seccion = nuevo ? sec : l.sec;
   const m = modal(`<h2>${nuevo?'Nueva lista':'Editar lista'}</h2>
     <div class="f"><label>Nombre</label><input type="text" id="lNombre" value="${esc(l?l.nombre:'')}" placeholder="Ej: Horas médicas"></div>
-    <div class="f"><label>Color</label>${swatchesHTML(l ? l.color : PAL_IDS[S.listas.length % PAL_IDS.length])}</div>
+    ${seccion === 'universidad' ? `<div class="f"><label>Ramo (opcional)</label>
+      <select id="lRamo">${opcionesRamo(l ? l.ramoId : '')}</select>
+      <p class="nota" style="margin-top:5px">Si eliges un ramo, la lista toma su color y las entregas de ese ramo caen aquí.</p></div>` : ''}
+    <div class="f"><label>Color</label>${swatchesHTML(l ? l.color : PAL_IDS[(S.listas.length*7) % PAL_IDS.length])}</div>
     <div class="acciones"><div class="spacer"></div>
       <button class="btn" data-cerrar>Cancelar</button>
       <button class="btn primary" id="lGuardar">Guardar</button></div>`);
@@ -1505,8 +1756,9 @@ function abrirLista(l, sec){
     const nombre = $('#lNombre', m.ov).value.trim();
     if(!nombre){ toast('Ponle un nombre'); return; }
     const color = colorElegido(m.ov);
-    if(nuevo) S.listas.push({id: uid(), sec, nombre, color, items: []});
-    else Object.assign(l, {nombre, color});
+    const ramoId = $('#lRamo', m.ov) ? $('#lRamo', m.ov).value : (l ? l.ramoId : null);
+    if(nuevo) S.listas.push({id: uid(), sec, nombre, color, ramoId, items: []});
+    else Object.assign(l, {nombre, color, ramoId});
     m.cerrar(); guardar();
   };
 }
@@ -1617,6 +1869,12 @@ function abrirConfig(){
       <div class="f"><label>La semana empieza el</label>
         <select id="pDia"><option value="1"${S.cfg.diaInicio===1?' selected':''}>Lunes</option>
         <option value="0"${S.cfg.diaInicio===0?' selected':''}>Domingo</option></select></div>
+      <div class="row">
+        <div class="f"><label>El calendario parte a las</label>
+          <select id="pHi">${Array.from({length:13},(_,h)=>`<option value="${h+1}"${S.cfg.horaIni===h+1?' selected':''}>${h+1}:00</option>`).join('')}</select></div>
+        <div class="f"><label>y termina a las</label>
+          <select id="pHf">${Array.from({length:11},(_,h)=>`<option value="${h+14}"${S.cfg.horaFin===h+14?' selected':''}>${h+14}:00</option>`).join('')}</select></div>
+      </div>
       <p class="nota">Atajos: <b>←</b> y <b>→</b> cambian de semana, <b>H</b> vuelve a hoy, <b>N</b> crea un evento.</p>
     </div>
 
@@ -1675,6 +1933,16 @@ function abrirConfig(){
     S = VACIO(); m.cerrar(); guardar(); toast('Todo limpio');
   };
   $('#pDia', ov).onchange = e => { S.cfg.diaInicio = +e.target.value; guardar(); };
+  $('#pHi', ov).onchange = e => {
+    S.cfg.horaIni = +e.target.value;
+    if(S.cfg.horaFin <= S.cfg.horaIni + 1){ S.cfg.horaFin = Math.min(24, S.cfg.horaIni + 2); $('#pHf', ov).value = S.cfg.horaFin; }
+    guardar();
+  };
+  $('#pHf', ov).onchange = e => {
+    S.cfg.horaFin = +e.target.value;
+    if(S.cfg.horaIni >= S.cfg.horaFin - 1){ S.cfg.horaIni = Math.max(0, S.cfg.horaFin - 2); $('#pHi', ov).value = S.cfg.horaIni; }
+    guardar();
+  };
 }
 
 /* ============================================================
@@ -1694,7 +1962,7 @@ function mover(n){
 
 $('#btnPrev').onclick = () => mover(-1);
 $('#btnNext').onclick = () => mover(1);
-$('#btnHoy').onclick  = () => { ancla = new Date(); diaSel = hoyIso(); render(); scrollAHora(Math.max(0, new Date().getHours()-2)); };
+$('#btnHoy').onclick  = () => { ancla = new Date(); diaSel = hoyIso(); render(); };
 $('#btnNuevo').onclick = () => abrirEvento(null, {fecha: diaSel});
 $('#btnRamos').onclick = abrirRamos;
 $('#btnConfig').onclick = abrirConfig;
